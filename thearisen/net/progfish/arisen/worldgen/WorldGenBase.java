@@ -2,14 +2,17 @@ package net.progfish.arisen.worldgen;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 public abstract class WorldGenBase {
 
-	public World worldObj;
+	protected static final int MID_HEIGHT = 63;
+	
+	protected World worldObj;
 	
 	public WorldGenBase(World worldObj) {
-		
+		this.worldObj = worldObj;
 	}
 
 	/**
@@ -33,26 +36,32 @@ public abstract class WorldGenBase {
 	 * @param blockID The block ID to generate
 	 * @param metadata The metadata to generate
 	 * @param dir 0 = x, z; 1 = x, y; 2 = y, z
-	 * @param shouldReplace Whether the circle should generate over another block
+	 * @param options 1: Overwrite blocks 2: Delete non-terrain blocks inside 4: Delete all blocks inside; 8: Overwrite non-opaque blocks Can add
 	 */
-	public void genCircle(int i, int j, int k, double innerRadius, double outerRadius, int blockID, int metadata, int dir, boolean shouldReplace) {
+	protected void genCircle(int i, int j, int k, double innerRadius, double outerRadius, int blockID, int metadata, int dir, int options) {
 		double outerSq = outerRadius * outerRadius;
 		double innerSq = innerRadius * innerRadius;
-		for(int x = -(int)outerRadius; x < outerRadius; x++) {
-			for(int y = -(int)outerRadius; y < outerRadius; y++) {
+		for(int x = -(int)outerRadius - 1; x < outerRadius + 1; x++) {
+			for(int y = -(int)outerRadius - 1; y < outerRadius + 1; y++) {
 				int distanceSq = (x * x) + (y * y);
-				if(innerSq < distanceSq && distanceSq < outerSq)
+				if(innerSq <= distanceSq && distanceSq <= outerSq)
 				{
+					int id;
 					switch(dir) {
 						case 0:
-							if(worldObj.getBlockId(i + x, j, k + y) == 0 || shouldReplace)
-							worldObj.setBlock(i + x, j, k + y, blockID, metadata, 3);
+							id = worldObj.getBlockId(i + x, j, k + y);
+							if((options & 1) == 1 || id == 0 || (!Block.blocksList[id].isOpaqueCube() && (options & 8) == 8))
+								worldObj.setBlock(i + x, j, k + y, blockID, metadata, 3);
+							break;
 						case 1:
-							if(worldObj.getBlockId(i + x, j + y, k) == 0 || shouldReplace)
-							worldObj.setBlock(i + x, j + y, k, blockID, metadata, 3);
+							id = worldObj.getBlockId(i + x, j + y, k);
+							if((options & 1) == 1 || id == 0 || (!Block.blocksList[id].isOpaqueCube() && (options & 8) == 8))
+								worldObj.setBlock(i + x, j + y, k, blockID, metadata, 3);
+							break;
 						case 2:
-							if(worldObj.getBlockId(i, j + x, k + y) == 0 || shouldReplace)
-							worldObj.setBlock(i, j + x, k + y, blockID, metadata, 3);
+							id = worldObj.getBlockId(i, j + x, k + y);
+							if((options & 1) == 1 || id == 0 || (!Block.blocksList[id].isOpaqueCube() && (options & 8) == 8))
+								worldObj.setBlock(i, j + x, k + y, blockID, metadata, 3);
 					}
 				}
 			}
@@ -68,22 +77,46 @@ public abstract class WorldGenBase {
 	 * @param outerRadius The radius of the sphere that forms the outer boundary of the sphere gened
 	 * @param blockID The block ID to generate
 	 * @param metadata The metadata to generate
-	 * @param shouldReplace Whether the sphere should generate over another block
+	 * @param options 1: Overwrite blocks 2: Delete non-terrain blocks inside 4: Delete all blocks inside; Can add
 	 */
-	public void genSphere(int i, int j, int k, double innerRadius, double outerRadius, int blockID, int metadata, boolean shouldReplace) {
+	protected void genSphere(int i, int j, int k, double innerRadius, double outerRadius, int blockID, int metadata, int options) {
 		double outerSq = outerRadius * outerRadius;
 		double innerSq = innerRadius * innerRadius;
-		for(int x = -(int)outerRadius; x < outerRadius; x++) {
-			for(int y = -(int)outerRadius; y < outerRadius; y++) {
-				for(int z = -(int)outerRadius; z < outerRadius; z++) {
+		for(int x = -(int)outerRadius - 1; x < outerRadius + 1; x++) {
+			for(int y = -(int)outerRadius - 1; y < outerRadius + 1; y++) {
+				for(int z = -(int)outerRadius - 1; z < outerRadius + 1; z++) {
 					int distanceSq = (x * x) + (y * y) + (z * z);
-					if(innerSq < distanceSq && distanceSq < outerSq && (worldObj.getBlockId(i + x, j + y, k + z) == 0 || shouldReplace))
-					{
+					
+					if((options & 2) == 2 && innerSq > distanceSq) {
+						int id = worldObj.getBlockId(i + x, j + y, k + z);
+						if(!(id == Block.grass.blockID || id == Block.dirt.blockID || id == Block.stone.blockID || id == Block.sand.blockID))
+						{
+							worldObj.setBlock(i + x, j + y, k + z, 0);
+						}
+					}
+					
+					if((options & 4) == 4 && innerSq > distanceSq) {
+						worldObj.setBlock(i + x, j + y, k + z, 0);
+					}
+					
+					if(innerSq < distanceSq && distanceSq < outerSq && (worldObj.getBlockId(i + x, j + y, k + z) == 0 || ((options & 1) == 1))) {
 						worldObj.setBlock(i + x, j + y, k + z, blockID, metadata, 3);
 					}
 				}
 			}
 		}
+	}
+	
+	protected int getTerrainLevelAt(int i, int k) {
+		for(int j = 127; j > 0; j--)
+		{
+			int id = worldObj.getBlockId(i, j, k);
+			if(id == Block.grass.blockID || id == Block.dirt.blockID || id == Block.stone.blockID || id == Block.sand.blockID)
+			{
+				return j;
+			}
+		}
+		return MID_HEIGHT;
 	}
 		
 }

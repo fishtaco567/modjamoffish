@@ -1,6 +1,11 @@
 package net.progfish.arisen;
 
+import net.progfish.arisen.blocks.ArisenBlocks;
+import net.progfish.arisen.commands.CommandRegistry;
+import net.progfish.arisen.entities.ArisenEntityRegistry;
+import net.progfish.arisen.proxy.CommonProxy;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.ServerStarting;
@@ -18,9 +23,12 @@ public class ArisenMod {
 	@Instance(ModInfo.MOD_ID)
 	public static ArisenMod instance;
 	
+	@SidedProxy(clientSide = "net.progfish.arisen.proxy.ClientProxy", serverSide = "net.progfish.arisen.proxy.CommonProxy")
+	public static CommonProxy proxy;
+	
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
-		
+		CommandRegistry.init(event);
 	}
 	
 	@EventHandler
@@ -35,7 +43,11 @@ public class ArisenMod {
 	
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
+		ArisenEntityRegistry.init(event);
 		
+		ArisenBlocks.init();
+		
+		proxy.initRenderers();
 	}
 	
 	@EventHandler
