@@ -40,7 +40,7 @@ public class ArisenMod {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		
+		Config.loadConfig();
 	}
 	
 	@EventHandler

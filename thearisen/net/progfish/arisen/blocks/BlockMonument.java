@@ -41,6 +41,9 @@ public class BlockMonument extends Block {
 	}
 
 	private void blockDestroyed(int i, int j, int k) {
+		if(!MonumentHandler.instance.isReady) {
+			MonumentHandler.instance.init();
+		}
 		MonumentHandler.instance.removeCoord(new ChunkCoordinates(i, 0, k));
 	}
 	

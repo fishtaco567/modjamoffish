@@ -140,7 +140,7 @@ public class WorldGenLichTower extends WorldGenBase {
 		genHalfSphere(i, lowest + height, k, tempSize - 1, tempSize, ArisenBlocks.forcefield.blockID, 0);
 
 		stepsRads = -(steps / 3);
-		for(int w = 0; w < 3; w++)
+		for(int w = 0; w < 5; w++)
 		{
 			float xRad = (float) Math.cos(stepsRads);
 			float zRad = (float) Math.sin(stepsRads);
@@ -154,6 +154,11 @@ public class WorldGenLichTower extends WorldGenBase {
 				worldObj.setBlock((int)(xRad * (size + x + 1) + i), perFloorLowest + 1 + y, (int)(zRad * (size + x + 1) + k), 0);
 				worldObj.setBlock((int)(xRad * (size + x + 1) + i), perFloorLowest + 2 + y, (int)(zRad * (size + x + 1) + k), 0);
 				worldObj.setBlock((int)(xRad * (size + x + 1) + i), perFloorLowest + 3 + y, (int)(zRad * (size + x + 1) + k), 0);
+			}
+			
+			if(w == 5)
+			{
+				worldObj.setBlock((int)(xRad * (size) + i), perFloorLowest + 2, (int)(zRad * (size) + k), ArisenBlocks.indicator.blockID);
 			}
 		}
 		

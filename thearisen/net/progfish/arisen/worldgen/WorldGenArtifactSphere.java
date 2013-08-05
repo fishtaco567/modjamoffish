@@ -26,7 +26,6 @@ public class WorldGenArtifactSphere extends WorldGenMonumentBase {
 			flying = true;
 		}
 		
-		System.out.println("Called");
 		int size = rand.nextInt(10) + 15;
 		
 		int terrainLevel = getTerrainLevelAt(i, k);
