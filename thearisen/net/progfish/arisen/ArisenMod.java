@@ -4,6 +4,7 @@ import net.progfish.arisen.blocks.ArisenBlocks;
 import net.progfish.arisen.commands.CommandRegistry;
 import net.progfish.arisen.entities.ArisenEntityRegistry;
 import net.progfish.arisen.proxy.CommonProxy;
+import net.progfish.arisen.worldgen.WorldGenHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -15,11 +16,12 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 @NetworkMod(clientSideRequired = true, serverSideRequired = false)
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION)
 public class ArisenMod {
-
+	
 	@Instance(ModInfo.MOD_ID)
 	public static ArisenMod instance;
 	
@@ -33,7 +35,7 @@ public class ArisenMod {
 	
 	@EventHandler
 	public void serverStop(FMLServerStoppedEvent event) {
-		
+		MonumentHandler.instance.close();
 	}
 	
 	@EventHandler
@@ -48,6 +50,8 @@ public class ArisenMod {
 		ArisenBlocks.init();
 		
 		proxy.initRenderers();
+		
+		GameRegistry.registerWorldGenerator(WorldGenHandler.instance);
 	}
 	
 	@EventHandler

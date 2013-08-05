@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import net.progfish.arisen.ArisenMod;
 import net.progfish.arisen.blocks.ArisenBlocks;
 import net.progfish.arisen.entities.EntityLich;
 
@@ -20,6 +19,8 @@ public class WorldGenLichTower extends WorldGenBase {
 	private static final int MIN_INCREASE_DISPLACE = 6;
 	private static final int MAX_FLOOR_DISPLACE = 8;
 	private static final int MIN_FLOOR_DISPLACE = 5;
+
+	private static final int TOWER_BLOCK = ArisenBlocks.abyssBrick.blockID;
 	
 	public WorldGenLichTower(World worldObj) {
 		super(worldObj);
@@ -33,8 +34,6 @@ public class WorldGenLichTower extends WorldGenBase {
 			for(int z = k - size; z < k + size; z++) {
 				int tLevel = getTerrainLevelAt(x, z);
 				if(tLevel < MID_HEIGHT - 5) {
-					System.out.println("Failed at: " + x + ", " + z);
-					return false;
 				} else if(tLevel < lowest) {
 					lowest = tLevel;
 				}
@@ -54,16 +53,23 @@ public class WorldGenLichTower extends WorldGenBase {
 		
 		int height = perFloor * (rand.nextInt(3) + 5) + 3;
 		
+		int perFloorLowest = 0;
+		int perFloorHighest = 127;
+		
 		int tempSize = size;
 		for(int y = lowest; y < lowest + height; y++) {
 			if(y % perFloor == 0) {
-				genCircle(i, y, k, 0, tempSize, Block.netherBrick.blockID, 0, 0, 8);
-				if(y + perFloor > lowest + height)
+				if(perFloorLowest == 0)
 				{
-					System.out.println("sp");
+					perFloorLowest = y;
+				}
+				genCircle(i, y, k, 0, tempSize, TOWER_BLOCK, 0, 0, 5);
+				if(y + perFloor >= lowest + height)
+				{
+					perFloorHighest = y;
 					EntityLich lich = new EntityLich(worldObj);
 					lich.setPosition(i, y + 2, k);
-					ArisenMod.proxy.spawnEntity(lich);
+					worldObj.spawnEntityInWorld(lich); 
 					break;
 				}
 			}
@@ -72,50 +78,75 @@ public class WorldGenLichTower extends WorldGenBase {
 			}
 		}
 		
+		tempSize = size;
 		for(int y = lowest; y < lowest + height; y++) {
-			genCircle(i, y, k, size - 1, size, Block.netherBrick.blockID, 0, 0, 8);
-			float xRad = (float) Math.cos(stepsRads);
-			float zRad = (float) Math.sin(stepsRads);
-			for(int w = 1; w < 4; w++) {
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y, (int)(zRad * (size - 1 - w) + k), Block.netherBrick.blockID);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i) + 1, y, (int)(zRad * (size - 1 - w) + k), Block.netherBrick.blockID);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i) - 1, y, (int)(zRad * (size - 1 - w) + k), Block.netherBrick.blockID);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y, (int)(zRad * (size - 1 - w) + k) + 1, Block.netherBrick.blockID);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y, (int)(zRad * (size - 1 - w) + k) - 1, Block.netherBrick.blockID);
-				
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 1, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i) + 1, y + 1, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i) - 1, y + 1, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 1, (int)(zRad * (size - 1 - w) + k) + 1, 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 1, (int)(zRad * (size - 1 - w) + k) - 1, 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 2, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i) + 1, y + 2, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i) - 1, y + 2, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 2, (int)(zRad * (size - 1 - w) + k) + 1, 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 2, (int)(zRad * (size - 1 - w) + k) - 1, 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 3, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i) + 1, y + 3, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i) - 1, y + 3, (int)(zRad * (size - 1 - w) + k), 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 3, (int)(zRad * (size - 1 - w) + k) + 1, 0);
-				worldObj.setBlock((int)(xRad * (size - 1 - w) + i), y + 3, (int)(zRad * (size - 1 - w) + k) - 1, 0);
+			if(y % perFloor != 0)
+			{
+				genCircle(i, y, k, tempSize - 1, tempSize, TOWER_BLOCK, 0, 0, 5);
 			}
-			stepsRads += steps;
+			if(((y % perFloor != 0) && (y < perFloorHighest && y > perFloorLowest)))
+			{
+				float zRad = (float) Math.cos(stepsRads);
+				float xRad = (float) Math.sin(stepsRads);
+				for(int w = 1; w < 4; w++) {
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y, (int)(zRad * (tempSize - 1 - w) + k), TOWER_BLOCK);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y, (int)(zRad * (tempSize - 1 - w) + k), TOWER_BLOCK);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y, (int)(zRad * (tempSize - 1 - w) + k), TOWER_BLOCK);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y, (int)(zRad * (tempSize - 1 - w) + k) + 1, TOWER_BLOCK);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y, (int)(zRad * (tempSize - 1 - w) + k) - 1, TOWER_BLOCK);
+					
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 1, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y + 1, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y + 1, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 1, (int)(zRad * (tempSize - 1 - w) + k) + 1, 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 1, (int)(zRad * (tempSize - 1 - w) + k) - 1, 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 2, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y + 2, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y + 2, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 2, (int)(zRad * (tempSize - 1 - w) + k) + 1, 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 2, (int)(zRad * (tempSize - 1 - w) + k) - 1, 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 3, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y + 3, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y + 3, (int)(zRad * (tempSize - 1 - w) + k), 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 3, (int)(zRad * (tempSize - 1 - w) + k) + 1, 0);
+					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 3, (int)(zRad * (tempSize - 1 - w) + k) - 1, 0);
+				}
+				stepsRads += steps;
+			}
 			
 			if(y % perWindow == 0 || (y - 1) % perWindow == 0) {
 				for(float rads = 0; rads <= 2 * PI; rads += windowStep) {
-					xRad = (float) Math.cos(rads);
-					zRad = (float) Math.sin(rads);
-					worldObj.setBlock((int)(xRad * (size - 1) + i), y, (int)(zRad * (size - 1) + k), ArisenBlocks.forcefield.blockID);
-					worldObj.setBlock((int)(xRad * (size) + i), y, (int)(zRad * (size) + k), ArisenBlocks.forcefield.blockID);
+					float xRad = (float) Math.cos(rads);
+					float zRad = (float) Math.sin(rads);
+					worldObj.setBlock((int)(xRad * (tempSize - 1) + i), y, (int)(zRad * (tempSize - 1) + k), ArisenBlocks.forcefield.blockID);
+					worldObj.setBlock((int)(xRad * (tempSize) + i), y, (int)(zRad * (tempSize) + k), ArisenBlocks.forcefield.blockID);
 				}
 			}
 			
 			if(y % perIncrease == 0) {
-				size++;
+				tempSize++;
 			}
 		}
 		
-		genHalfSphere(i, lowest + height, k, size - 1, size, ArisenBlocks.forcefield.blockID, 0);
+		genHalfSphere(i, lowest + height, k, size - 1, tempSize, ArisenBlocks.forcefield.blockID, 0);
+
+		stepsRads = -(steps / 3);
+		for(int w = 0; w < 3; w++)
+		{
+			float xRad = (float) Math.cos(stepsRads);
+			float zRad = (float) Math.sin(stepsRads);
+			worldObj.setBlock((int)(xRad * (size) + i), perFloorLowest + 1, (int)(zRad * (size) + k), ArisenBlocks.abyssBarrier.blockID);
+			worldObj.setBlock((int)(xRad * (size) + i), perFloorLowest + 2, (int)(zRad * (size) + k), ArisenBlocks.abyssBarrier.blockID);
+			System.out.println((int)(xRad * (size) + i) + ", " + (perFloorLowest + 2) + ", " + (int)(zRad * (size) + k));
+			stepsRads += (steps / 3);
+			for(int x = 0; x < 12; x++)
+			{
+				int y = x / 2 - 1;
+				worldObj.setBlock((int)(xRad * (size + x + 1) + i), perFloorLowest + 1 + y, (int)(zRad * (size + x + 1) + k), 0);
+				worldObj.setBlock((int)(xRad * (size + x + 1) + i), perFloorLowest + 2 + y, (int)(zRad * (size + x + 1) + k), 0);
+				worldObj.setBlock((int)(xRad * (size + x + 1) + i), perFloorLowest + 3 + y, (int)(zRad * (size + x + 1) + k), 0);
+			}
+		}
 		
 		return true;
 	}

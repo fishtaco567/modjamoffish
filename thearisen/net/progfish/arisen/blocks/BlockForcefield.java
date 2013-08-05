@@ -28,11 +28,14 @@ public class BlockForcefield extends Block {
 	public boolean renderAsNormalBlock() {
         return false;
     }
+	
+    public int getMobilityFlag() {
+        return 2;
+    }
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
-		System.out.println("C");
 		blockIcon = registry.registerIcon("arisen:forcefield");
 	}
 

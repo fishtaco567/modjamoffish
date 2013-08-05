@@ -64,6 +64,45 @@ public abstract class WorldGenBase {
 								worldObj.setBlock(i, j + x, k + y, blockID, metadata, 3);
 					}
 				}
+				
+				if((options & 2) == 2 && innerSq > distanceSq) {
+					int id = 0;
+					switch(dir) {
+						case 0:
+							id = worldObj.getBlockId(i + x, j, k + y);
+							break;
+						case 1:
+							id = worldObj.getBlockId(i + x, j + y, k);
+							break;
+						case 2:
+							id = worldObj.getBlockId(i, j + x, k + y);
+					}
+					if(!(id == Block.grass.blockID || id == Block.dirt.blockID || id == Block.stone.blockID || id == Block.sand.blockID))
+					{
+						switch(dir) {
+							case 0:
+								worldObj.setBlock(i + x, j, k + y, 0);
+								break;
+							case 1:
+								worldObj.setBlock(i + x, j + y, k, 0);
+								break;
+							case 2:
+								worldObj.setBlock(i, j + x, k + y, 0);
+						}	
+					}
+				}
+				if((options & 4) == 4 && innerSq > distanceSq) {
+					switch(dir) {
+						case 0:
+							worldObj.setBlock(i + x, j, k + y, 0);
+							break;
+						case 1:
+							worldObj.setBlock(i + x, j + y, k, 0);
+							break;
+						case 2:
+							worldObj.setBlock(i, j + x, k + y, 0);
+					}
+				}				
 			}
 		}
 	}
@@ -103,6 +142,21 @@ public abstract class WorldGenBase {
 						worldObj.setBlock(i + x, j + y, k + z, blockID, metadata, 3);
 					}
 				}
+			}
+		}
+	}
+	
+	public void genCircleOnTerrain(int i, int k, double innerRadius, double outerRadius, int id, int meta, int lowest) {
+		double outerSq = outerRadius * outerRadius;
+		double innerSq = innerRadius * innerRadius;
+		for(int x = -(int)outerRadius - 1; x < outerRadius + 1; x++) {
+			for(int y = -(int)outerRadius - 1; y < outerRadius + 1; y++) {
+				int distanceSq = (x * x) + (y * y);
+				if(innerSq <= distanceSq && distanceSq <= outerSq)
+				{
+					int terrainLevel = getTerrainLevelAt(x + i, y + k);
+					worldObj.setBlock(x + i, terrainLevel < lowest ? lowest : terrainLevel, y + k, id, meta, 3);
+				}			
 			}
 		}
 	}

@@ -10,12 +10,4 @@ public class CommonProxy {
 		
 	}
 	
-	public void spawnEntity(Entity e) {
-		World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0);
-		if(!world.isRemote)
-		{
-			world.joinEntityInSurroundings(e);
-		}
-	}
-	
 }
