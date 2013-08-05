@@ -8,10 +8,10 @@ import net.progfish.arisen.ArisenMod;
 
 public class ArisenEntityRegistry {
 
-	private static int entityID = 42;
+	private static int entityID = 0;
 	
 	public static void init(FMLInitializationEvent event) {
-		addMapping(EntityLich.class, "Lich", 64, 3, false, false);
+		addMapping(EntityLich.class, "Lich", 64, 1, true, false);
 		addMobName("Lich", "Lich");
 	}
 	

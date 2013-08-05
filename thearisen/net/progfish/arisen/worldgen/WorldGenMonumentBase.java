@@ -10,6 +10,10 @@ public abstract class WorldGenMonumentBase extends WorldGenBase {
 		super(worldObj);
 	}
 	
+	public WorldGenMonumentBase() {
+		super(null);
+	}
+	
 	public abstract WorldGenMonumentBase makeGenerator(World world);
 
 }

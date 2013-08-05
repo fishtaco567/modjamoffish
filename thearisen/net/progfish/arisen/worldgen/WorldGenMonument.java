@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class WorldGenMonument extends WorldGenBase {
 
-	public static WorldGenMonumentBase[] factories = new WorldGenMonumentBase[] {new WorldGenArtifactSphere()};
+	public static WorldGenMonumentBase[] factories = new WorldGenMonumentBase[] {new WorldGenArtifactSphere(), new WorldGenCone(), new WorldGenRings()};
 	
 	public WorldGenMonument(World worldObj) {
 		super(worldObj);
