@@ -1,6 +1,9 @@
 package net.progfish.arisen;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.progfish.arisen.blocks.ArisenBlocks;
+import net.progfish.arisen.client.item.ArisenItems;
 import net.progfish.arisen.commands.CommandRegistry;
 import net.progfish.arisen.entities.ArisenEntityRegistry;
 import net.progfish.arisen.proxy.CommonProxy;
@@ -48,11 +51,15 @@ public class ArisenMod {
 		ArisenEntityRegistry.init(event);
 		
 		ArisenBlocks.init();
+		ArisenItems.init();
 		
 		proxy.initRenderers();
 		
 		GameRegistry.registerWorldGenerator(WorldGenHandler.instance);
+		GameRegistry.addRecipe(new ItemStack(ArisenItems.monumentFinder, 1), new Object[] {" x " , "xzx", " x ", 'x', new ItemStack(Item.ingotIron, 1), 'z', new ItemStack(ArisenItems.monumentDust, 1)});
 	}
+	
+	
 	
 	@EventHandler
 	public void modsLoaded(FMLPostInitializationEvent event) {

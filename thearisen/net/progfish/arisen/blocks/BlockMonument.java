@@ -1,5 +1,7 @@
 package net.progfish.arisen.blocks;
 
+import java.util.Random;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -10,6 +12,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.progfish.arisen.MonumentHandler;
+import net.progfish.arisen.client.item.ArisenItems;
 
 public class BlockMonument extends Block {
 
@@ -28,6 +31,12 @@ public class BlockMonument extends Block {
 	public Icon getIcon(int side, int meta)
 	{
 		return side == 1 ? iconTop : iconSide;
+	}
+	
+	@Override
+	public int idDropped(int par1, Random par2Random, int par3)
+	{
+		return ArisenItems.monumentDust.itemID;
 	}
 	
 	@Override

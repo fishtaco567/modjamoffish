@@ -27,9 +27,7 @@ public class WorldGenHandler implements IWorldGenerator {
 		{
 			boolean lichTower = false;
 			Random lichTowerRand = new Random(world.getSeed());
-			int lichTowerX = ((lichTowerRand.nextInt(32) * 16) - (16 * 16));
-			int lichTowerZ = ((lichTowerRand.nextInt(32) * 16) - (16 * 16));
-			if(x == lichTowerX && z == lichTowerZ) {
+			if(x == 0 && z == 0) {
 				new WorldGenLichTower(world).generate(rand, x, 0, z);
 				lichTower = true;
 			}
