@@ -7,7 +7,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.progfish.arisen.MonumentHandler;
+import net.progfish.arisen.WorldSaveHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -26,10 +26,10 @@ public class BlockIndicatorBrick extends Block {
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int meta)
 	{
-		if(!MonumentHandler.instance.isReady) {
-			MonumentHandler.instance.init();
+		if(!WorldSaveHandler.instance.isReady) {
+			WorldSaveHandler.instance.init();
 		}
-		return icons[MonumentHandler.instance.coordList.size()];
+		return icons[WorldSaveHandler.instance.coordList.size()];
 	}
 	
     public int getMobilityFlag() {

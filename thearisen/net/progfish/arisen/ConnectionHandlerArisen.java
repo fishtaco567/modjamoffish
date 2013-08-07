@@ -23,8 +23,11 @@ public class ConnectionHandlerArisen implements IConnectionHandler {
 	public void playerLoggedIn(Player player, NetHandler netHandler,
 			INetworkManager manager) {
 		if(player instanceof EntityPlayerMP) {
-			((EntityPlayerMP)((EntityPlayerMP) player)).sendChatToPlayer(ChatMessageComponent.func_111077_e(message));
-			((EntityPlayerMP)((EntityPlayerMP) player)).sendChatToPlayer(ChatMessageComponent.func_111077_e(message2));
+			EntityPlayerMP playerMP = ((EntityPlayerMP) player);
+			if(!Config.optOutList.contains(playerMP.username)) {
+				playerMP.sendChatToPlayer(ChatMessageComponent.func_111077_e(message));
+				playerMP.sendChatToPlayer(ChatMessageComponent.func_111077_e(message2));
+			}
 		}
 	}
 

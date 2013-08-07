@@ -8,8 +8,11 @@ import net.progfish.arisen.ModInfo;
 
 public class ArisenItems {
 
-	public static ItemMonumentDust monumentDust = (ItemMonumentDust) new ItemMonumentDust(10772).setCreativeTab(CreativeTabs.tabMisc);
-	public static Item monumentFinder = new ItemMonumentFinder(10773).setCreativeTab(CreativeTabs.tabMisc);
+	public static int monumentDustID = 10772;
+	public static int monumentFinderID = 10773;
+	
+	public static ItemMonumentDust monumentDust = (ItemMonumentDust) new ItemMonumentDust(monumentDustID).setCreativeTab(CreativeTabs.tabMisc);
+	public static Item monumentFinder = new ItemMonumentFinder(monumentFinderID).setCreativeTab(CreativeTabs.tabMisc);
 	
 	public static void init() {
 		registerItem(monumentDust, "Monument Dust");

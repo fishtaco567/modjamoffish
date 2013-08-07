@@ -15,6 +15,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.progfish.arisen.WorldSaveHandler;
 
 public class EntityLich extends EntityMob {
 
@@ -91,6 +92,8 @@ public class EntityLich extends EntityMob {
 		for(int i = 0; i < amountOfLoot; i++) {
 			chest.setInventorySlotContents(this.getRNG().nextInt(chest.getSizeInventory()), getLoot(this.getRNG()));
 		}
+		
+		WorldSaveHandler.instance.lichKilled = true;
     }
 	
 	private ItemStack getLoot(Random rand)

@@ -6,7 +6,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.progfish.arisen.MonumentHandler;
+import net.progfish.arisen.WorldSaveHandler;
 import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenHandler implements IWorldGenerator {
@@ -16,8 +16,8 @@ public class WorldGenHandler implements IWorldGenerator {
 	@Override
 	public void generate(Random rand, int chunkX, int chunkZ, World world,
 			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-		if(MonumentHandler.instance.isReady != true) {
-			MonumentHandler.instance.init();
+		if(WorldSaveHandler.instance.isReady != true) {
+			WorldSaveHandler.instance.init();
 		}
 		
 		int x = chunkX * 16;
@@ -32,11 +32,11 @@ public class WorldGenHandler implements IWorldGenerator {
 				lichTower = true;
 			}
 			
-			if(MonumentHandler.instance.coordList.contains(new ChunkCoordinates(x, 0, z))) {
+			if(WorldSaveHandler.instance.coordList.contains(new ChunkCoordinates(x, 0, z))) {
 				if(!lichTower) {
 					new WorldGenMonument(world).generate(rand, x, rand.nextInt(127), z);
 				} else {
-					MonumentHandler.instance.removeCoord(new ChunkCoordinates(x, 0, z));
+					WorldSaveHandler.instance.removeCoord(new ChunkCoordinates(x, 0, z));
 				}
 			}
 		}

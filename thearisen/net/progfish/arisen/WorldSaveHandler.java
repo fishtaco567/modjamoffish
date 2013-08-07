@@ -17,15 +17,16 @@ import net.minecraft.util.ChunkCoordinates;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-public class MonumentHandler {
+public class WorldSaveHandler {
 
 	private File saveFile;
 	public ArrayList<ChunkCoordinates> coordList = new ArrayList();
+	public boolean lichKilled = false;
 	public boolean isReady = false;
 	
-	public static MonumentHandler instance = new MonumentHandler();
+	public static WorldSaveHandler instance = new WorldSaveHandler();
 	
-	public MonumentHandler() {
+	public WorldSaveHandler() {
 		
 	}
 	
@@ -61,9 +62,15 @@ public class MonumentHandler {
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(f));
 			while(reader.ready()) {
-				String coordString = reader.readLine();
-				String[] coords = coordString.split(" ");
-				coordList.add(new ChunkCoordinates(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2])));
+				String string = reader.readLine();
+				if(string.equals("lich")) {
+					lichKilled = false;
+				} else if(string.equals("lichkill")) {
+					lichKilled = true;
+				} else {
+					String[] coords = string.split(" ");
+					coordList.add(new ChunkCoordinates(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]), Integer.parseInt(coords[2])));
+				}
 			}
 			reader.close();
 		} catch (FileNotFoundException e) {
@@ -103,6 +110,7 @@ public class MonumentHandler {
 				created++;
 			}
 			if(created == 12 ) {
+				writer.println("lich");
 				break;
 			}
 		}
@@ -122,9 +130,14 @@ public class MonumentHandler {
 			for(ChunkCoordinates coords : instance.coordList) {
 				writer.println(coords.posX + " " + "0" + " " + coords.posZ);
 			}
+			if(!instance.lichKilled) {
+				writer.println("lich");
+			} else {
+				writer.println("lichkill");
+			}
 			writer.close();
 		}
-		instance = new MonumentHandler();
+		instance = new WorldSaveHandler();
 	}
 
 	public ChunkCoordinates getNearestMonument(double par2, double par4) {

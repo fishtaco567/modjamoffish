@@ -11,7 +11,7 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.progfish.arisen.MonumentHandler;
+import net.progfish.arisen.WorldSaveHandler;
 import net.progfish.arisen.client.item.ArisenItems;
 
 public class BlockMonument extends Block {
@@ -50,10 +50,10 @@ public class BlockMonument extends Block {
 	}
 
 	private void blockDestroyed(int i, int j, int k) {
-		if(!MonumentHandler.instance.isReady) {
-			MonumentHandler.instance.init();
+		if(!WorldSaveHandler.instance.isReady) {
+			WorldSaveHandler.instance.init();
 		}
-		MonumentHandler.instance.removeCoord(new ChunkCoordinates(i, 0, k));
+		WorldSaveHandler.instance.removeCoord(new ChunkCoordinates(i, 0, k));
 	}
 	
     public int getMobilityFlag() {

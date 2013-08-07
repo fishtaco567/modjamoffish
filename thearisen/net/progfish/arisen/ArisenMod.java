@@ -38,12 +38,12 @@ public class ArisenMod {
 	
 	@EventHandler
 	public void serverStop(FMLServerStoppedEvent event) {
-		MonumentHandler.instance.close();
+		WorldSaveHandler.instance.close();
 	}
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		Config.loadConfig();
+		Config.loadConfig(event);
 	}
 	
 	@EventHandler
