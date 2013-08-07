@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockIndicatorBrick extends Block {
 
 	@SideOnly(Side.CLIENT)
-	private Icon[] icons = new Icon[13];
+	private Icon[] icons;
 	
 	public BlockIndicatorBrick(int i)
 	{
@@ -40,6 +40,7 @@ public class BlockIndicatorBrick extends Block {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister registry) {
 		int index = 0;
+		icons = new Icon[13];
 		for(int i = 12; i >= 0; i--)
 		{
 			icons[index] = registry.registerIcon("arisen:indicator_" + i);

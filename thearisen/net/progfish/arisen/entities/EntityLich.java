@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -41,37 +42,43 @@ public class EntityLich extends EntityMob {
 	
 	@Override
 	protected void attackEntity(Entity par1Entity, float par2) {
-        if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
-        {
-            this.attackTime = 30;
-            this.attackEntityAsMob(par1Entity);
-            if(this.getRNG().nextInt(5) == 0)
+		boolean attacked = false;
+		if(this.attackTime <= 0) {
+			if(this.getRNG().nextInt(5) == 0)
             {
             	if(par1Entity instanceof EntityLivingBase)
             	{
+            		boolean isCreative = false;
             		EntityLivingBase entityLiving  = (EntityLivingBase)par1Entity;
-            		int effect = this.getRNG().nextInt(4);
-            		switch(effect) {
-            			case 0:
-            				entityLiving.addPotionEffect(new PotionEffect(15, 300, 2, true));
-            				break;
-            			case 1:
-            				entityLiving.addPotionEffect(new PotionEffect(18, 300, 1, true));
-            				break;
-            			case 2:
-            				entityLiving.addPotionEffect(new PotionEffect(9, 300, 1, true));
-            				break;
-            			case 3:
-            				entityLiving.addPotionEffect(new PotionEffect(2, 200, 2, true));
-            				break;
+            		if(entityLiving instanceof EntityPlayer) {
+            			if(((EntityPlayer)entityLiving).capabilities.isCreativeMode) {
+            				isCreative = true;
+            			}
             		}
-            		if(this.getRNG().nextInt(3) == 0)
-            		{
+            		
+            		if(!isCreative) {
+	            		int effect = this.getRNG().nextInt(4);
+	            		switch(effect) {
+	            			case 0:
+	            				entityLiving.addPotionEffect(new PotionEffect(15, 300, 2, true));
+	            				break;
+	            			case 1:
+	            				entityLiving.addPotionEffect(new PotionEffect(18, 300, 1, true));
+	            				break;
+	            			case 2:
+	            				entityLiving.addPotionEffect(new PotionEffect(9, 300, 1, true));
+	            				break;
+	            			case 3:
+	            				entityLiving.addPotionEffect(new PotionEffect(2, 200, 2, true));
+	            				break;
+	            		}
+            		}
+            		
+            		if(this.getRNG().nextInt(3) == 0) {
             			this.addPotionEffect(new PotionEffect(14, 400, 2, true));
             		}
             		
-            		for (int i = 0; i < 20; ++i)
-                    {
+            		for (int i = 0; i < 20; ++i) {
                         double d0 = this.rand.nextGaussian() * 0.02D;
                         double d1 = this.rand.nextGaussian() * 0.02D;
                         double d2 = this.rand.nextGaussian() * 0.02D;
@@ -79,6 +86,11 @@ public class EntityLich extends EntityMob {
                     }
             	}
             }
+		}
+        if (this.attackTime <= 0 && par2 < 2.0F && par1Entity.boundingBox.maxY > this.boundingBox.minY && par1Entity.boundingBox.minY < this.boundingBox.maxY)
+        {
+            this.attackTime = 30;
+            this.attackEntityAsMob(par1Entity);
         }
     }
 	
