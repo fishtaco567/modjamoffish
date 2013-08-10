@@ -21,11 +21,11 @@ public class ArisenBlocks {
 	
 	public static void init()
 	{
-		forcefield = (BlockForcefield) new BlockForcefield(forcefieldID).setResistance(100000).setCreativeTab(CreativeTabs.tabMisc); //TODO: Add config
-		abyssBrick = (BlockAbyssBrick) new BlockAbyssBrick(abyssBrickID).setResistance(100000).setCreativeTab(CreativeTabs.tabMisc); //TODO: Add config
-		abyssBarrier = (BlockAbyssBarrier) new BlockAbyssBarrier(abyssBarrierID).setResistance(100000).setCreativeTab(CreativeTabs.tabMisc); //TODO: Add config
-		monument = (BlockMonument) new BlockMonument(monumentID).setCreativeTab(CreativeTabs.tabMisc); //TODO: Add config
-		indicator = (BlockIndicatorBrick) new BlockIndicatorBrick(indicatorID).setResistance(100000).setCreativeTab(CreativeTabs.tabMisc); //TODO: Add config
+		forcefield = (BlockForcefield) new BlockForcefield(forcefieldID).setUnlocalizedName("a_forcefield").setResistance(100000).setCreativeTab(CreativeTabs.tabMisc);
+		abyssBrick = (BlockAbyssBrick) new BlockAbyssBrick(abyssBrickID).setUnlocalizedName("a_abyssBrick").setResistance(100000).setCreativeTab(CreativeTabs.tabMisc);
+		abyssBarrier = (BlockAbyssBarrier) new BlockAbyssBarrier(abyssBarrierID).setUnlocalizedName("a_abyssbarrier").setResistance(100000).setCreativeTab(CreativeTabs.tabMisc);
+		monument = (BlockMonument) new BlockMonument(monumentID).setUnlocalizedName("a_monument").setCreativeTab(CreativeTabs.tabMisc);
+		indicator = (BlockIndicatorBrick) new BlockIndicatorBrick(indicatorID).setUnlocalizedName("a_indicator").setResistance(100000).setCreativeTab(CreativeTabs.tabMisc);
 		
 		registerBlock(forcefield, "Forcefield");
 		registerBlock(abyssBrick, "Abbysal Brick");
