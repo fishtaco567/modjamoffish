@@ -103,7 +103,6 @@ public class EntityLich extends EntityMob {
 	
 	@Override
 	public void onEntityUpdate() {
-		System.out.println("lich" + this.posX + ", " + this.posZ);
 		super.onEntityUpdate();
 		if(worldObj.isRemote) {
 			int timer = this.dataWatcher.getWatchableObjectByte(16);
