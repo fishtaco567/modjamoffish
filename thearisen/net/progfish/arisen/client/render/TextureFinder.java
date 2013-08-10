@@ -7,7 +7,8 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
-import net.progfish.arisen.WorldSaveHandler;
+import net.progfish.arisen.WorldSaveHandlerClient;
+import net.progfish.arisen.WorldSaveHandlerServer;
 
 @SideOnly(Side.CLIENT)
 public class TextureFinder extends TextureAtlasSprite
@@ -49,7 +50,7 @@ public class TextureFinder extends TextureAtlasSprite
 
             if (par1World != null && !par8)
             {
-                ChunkCoordinates chunkcoordinates = WorldSaveHandler.instance.getNearestMonument(par2, par4);
+                ChunkCoordinates chunkcoordinates = WorldSaveHandlerClient.getNearestMonument(par2, par4);
                 double d4 = (double)chunkcoordinates.posX - par2;
                 double d5 = (double)chunkcoordinates.posZ - par4;
                 par6 %= 360.0D;

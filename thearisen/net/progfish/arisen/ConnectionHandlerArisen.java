@@ -6,6 +6,7 @@ import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
+import net.progfish.arisen.network.ArisenPacketHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.IConnectionHandler;
 import cpw.mods.fml.common.network.Player;
@@ -27,6 +28,7 @@ public class ConnectionHandlerArisen implements IConnectionHandler {
 			if(!Config.optOutList.contains(playerMP.username)) {
 				playerMP.sendChatToPlayer(ChatMessageComponent.func_111077_e(message));
 				playerMP.sendChatToPlayer(ChatMessageComponent.func_111077_e(message2));
+				playerMP.playerNetServerHandler.sendPacketToPlayer(ArisenPacketHandler.getMonumentPacket());
 			}
 		}
 	}

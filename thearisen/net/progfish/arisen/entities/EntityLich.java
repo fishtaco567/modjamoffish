@@ -16,15 +16,24 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
-import net.progfish.arisen.WorldSaveHandler;
+import net.progfish.arisen.WorldSaveHandlerServer;
 
 public class EntityLich extends EntityMob {
 
 	private Random displayRand;
 	public float floatOffset;
 	
+	private int effectParticleTimer = -1;
+	
 	public EntityLich(World par1World) {
 		super(par1World);
+        this.isImmuneToFire = true;
+	}
+	
+	@Override
+	public void entityInit() {
+		super.entityInit();
+		this.dataWatcher.addObject(16, new Byte((byte)-1));
 	}
 	
 	@Override
@@ -74,16 +83,11 @@ public class EntityLich extends EntityMob {
 	            		}
             		}
             		
-            		if(this.getRNG().nextInt(3) == 0) {
+            		if(this.getRNG().nextInt(4) == 0) {
             			this.addPotionEffect(new PotionEffect(14, 400, 2, true));
             		}
             		
-            		for (int i = 0; i < 20; ++i) {
-                        double d0 = this.rand.nextGaussian() * 0.02D;
-                        double d1 = this.rand.nextGaussian() * 0.02D;
-                        double d2 = this.rand.nextGaussian() * 0.02D;
-                        this.worldObj.spawnParticle("explode", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
-                    }
+            		this.dataWatcher.updateObject(16, new Byte((byte)10));
             	}
             }
 		}
@@ -93,6 +97,27 @@ public class EntityLich extends EntityMob {
             this.attackEntityAsMob(par1Entity);
         }
     }
+	
+	@Override
+    protected void fall(float par1) {}
+	
+	@Override
+	public void onEntityUpdate() {
+		System.out.println("lich" + this.posX + ", " + this.posZ);
+		super.onEntityUpdate();
+		if(worldObj.isRemote) {
+			int timer = this.dataWatcher.getWatchableObjectByte(16);
+			if(timer > 0) {
+	    		for (int i = 0; i < 20; i++) {
+	                double d0 = this.rand.nextGaussian() * 0.02D;
+	                double d1 = this.rand.nextGaussian() * 0.02D;
+	                double d2 = this.rand.nextGaussian() * 0.02D;
+	                this.worldObj.spawnParticle("explode", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+	            }
+	    		this.dataWatcher.updateObject(16, new Byte((byte)(timer - 1)));
+			}
+		}
+	}
 	
 	@Override
 	public void onDeath(DamageSource par1DamageSource) {
@@ -105,7 +130,7 @@ public class EntityLich extends EntityMob {
 			chest.setInventorySlotContents(this.getRNG().nextInt(chest.getSizeInventory()), getLoot(this.getRNG()));
 		}
 		
-		WorldSaveHandler.instance.lichKilled = true;
+		WorldSaveHandlerServer.instance.setLichKilled(true);
     }
 	
 	private ItemStack getLoot(Random rand)

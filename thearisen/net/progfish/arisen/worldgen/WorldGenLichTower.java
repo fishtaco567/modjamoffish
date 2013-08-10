@@ -38,8 +38,7 @@ public class WorldGenLichTower extends WorldGenBase {
 		for(int x = i - size; x < i + size; x++) {
 			for(int z = k - size; z < k + size; z++) {
 				int tLevel = getTerrainLevelAt(x, z);
-				if(tLevel < MID_HEIGHT - 5) {
-				} else if(tLevel < lowest) {
+				if(tLevel < lowest) {
 					lowest = tLevel;
 				}
 			}
@@ -77,7 +76,7 @@ public class WorldGenLichTower extends WorldGenBase {
 				{
 					perFloorHighest = y;
 					EntityLich lich = new EntityLich(worldObj);
-					lich.setPosition(i, y + 2, k);
+					lich.setPosition(i, y + 3, k);
 					worldObj.spawnEntityInWorld(lich); 
 					break;
 				}
@@ -104,21 +103,21 @@ public class WorldGenLichTower extends WorldGenBase {
 					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y, (int)(zRad * (tempSize - 1 - w) + k) + 1, TOWER_BLOCK);
 					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y, (int)(zRad * (tempSize - 1 - w) + k) - 1, TOWER_BLOCK);
 					
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 1, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y + 1, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y + 1, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 1, (int)(zRad * (tempSize - 1 - w) + k) + 1, 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 1, (int)(zRad * (tempSize - 1 - w) + k) - 1, 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 2, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y + 2, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y + 2, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 2, (int)(zRad * (tempSize - 1 - w) + k) + 1, 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 2, (int)(zRad * (tempSize - 1 - w) + k) - 1, 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 3, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y + 3, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y + 3, (int)(zRad * (tempSize - 1 - w) + k), 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 3, (int)(zRad * (tempSize - 1 - w) + k) + 1, 0);
-					worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + 3, (int)(zRad * (tempSize - 1 - w) + k) - 1, 0);
+					for(int v = 1; v < 4; v++) {
+						if(y + v == perFloorHighest) {
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + v, (int)(zRad * (tempSize - 1 - w) + k), 1);
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y + v, (int)(zRad * (tempSize - 1 - w) + k), 1);
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y + v, (int)(zRad * (tempSize - 1 - w) + k), 1);
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + v, (int)(zRad * (tempSize - 1 - w) + k) + 1, 1);
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + v, (int)(zRad * (tempSize - 1 - w) + k) - 1, 1);
+						} else {
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + v, (int)(zRad * (tempSize - 1 - w) + k), 0);
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) + 1, y + v, (int)(zRad * (tempSize - 1 - w) + k), 0);
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i) - 1, y + v, (int)(zRad * (tempSize - 1 - w) + k), 0);
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + v, (int)(zRad * (tempSize - 1 - w) + k) + 1, 0);
+							worldObj.setBlock((int)(xRad * (tempSize - 1 - w) + i), y + v, (int)(zRad * (tempSize - 1 - w) + k) - 1, 0);							
+						}
+					}
 				}
 				stepsRads += steps;
 			}
@@ -140,14 +139,12 @@ public class WorldGenLichTower extends WorldGenBase {
 		genHalfSphere(i, lowest + height, k, tempSize - 1, tempSize, ArisenBlocks.forcefield.blockID, 0);
 
 		stepsRads = -(steps / 3);
-		for(int w = 0; w < 5; w++)
+		for(int w = 0; w < 6; w++)
 		{
 			float xRad = (float) Math.cos(stepsRads);
 			float zRad = (float) Math.sin(stepsRads);
 			worldObj.setBlock((int)(xRad * (size) + i), perFloorLowest + 1, (int)(zRad * (size) + k), ArisenBlocks.abyssBarrier.blockID);
 			worldObj.setBlock((int)(xRad * (size) + i), perFloorLowest + 2, (int)(zRad * (size) + k), ArisenBlocks.abyssBarrier.blockID);
-			System.out.println((int)(xRad * (size) + i) + ", " + (perFloorLowest + 2) + ", " + (int)(zRad * (size) + k));
-			stepsRads += (steps / 3);
 			for(int x = 0; x < 12; x++)
 			{
 				int y = x / 2 - 1;
@@ -160,6 +157,8 @@ public class WorldGenLichTower extends WorldGenBase {
 			{
 				worldObj.setBlock((int)(xRad * (size) + i), perFloorLowest + 2, (int)(zRad * (size) + k), ArisenBlocks.indicator.blockID);
 			}
+			
+			stepsRads += (steps / 3);
 		}
 		
 		for(int floor : floors)
@@ -169,7 +168,9 @@ public class WorldGenLichTower extends WorldGenBase {
 			makeSpawner(rand, i - 1, floor, k);
 			makeSpawner(rand, i, floor, k + 1);
 			makeSpawner(rand, i, floor, k - 1);
-			makeChest(rand, i, floor + 1, k);
+			if(floor != perFloorHighest) {
+				makeChest(rand, i, floor + 1, k);
+			}
 			
 			worldObj.setBlock((int)(i + size / 1.7), floor + 1, (int)(k + size / 1.7), Block.obsidian.blockID);
 			worldObj.setBlock((int)(i - size / 1.7), floor + 1, (int)(k + size / 1.7), Block.obsidian.blockID);

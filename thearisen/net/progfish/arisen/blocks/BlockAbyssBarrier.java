@@ -7,7 +7,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.progfish.arisen.WorldSaveHandler;
+import net.progfish.arisen.WorldSaveHandlerClient;
+import net.progfish.arisen.WorldSaveHandlerServer;
 
 public class BlockAbyssBarrier extends Block {
 	
@@ -36,10 +37,15 @@ public class BlockAbyssBarrier extends Block {
     }
     
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4) {
-		if(!WorldSaveHandler.instance.isReady) {
-			WorldSaveHandler.instance.init();
-		}
-    	return (WorldSaveHandler.instance.coordList.size() > 3) ? super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4) : null;
+    	if(!par1World.isRemote) {
+			if(!WorldSaveHandlerServer.instance.isReady) {
+				WorldSaveHandlerServer.instance.init();
+			}
+	    	return (WorldSaveHandlerServer.instance.getCoordList().size() > 3) ? super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4) : null;
+    	} else if(WorldSaveHandlerClient.isReady) {
+    	    	return (WorldSaveHandlerClient.coordList.size() > 3) ? super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4) : null;
+    	}
+    	return super.getCollisionBoundingBoxFromPool(par1World, par2, par3, par4);
     }
     
 	@Override

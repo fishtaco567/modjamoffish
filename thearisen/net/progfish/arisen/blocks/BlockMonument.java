@@ -7,12 +7,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.Icon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.progfish.arisen.WorldSaveHandler;
+import net.progfish.arisen.WorldSaveHandlerServer;
 import net.progfish.arisen.client.item.ArisenItems;
+import net.progfish.arisen.network.ArisenPacketHandler;
 
 public class BlockMonument extends Block {
 
@@ -41,19 +43,21 @@ public class BlockMonument extends Block {
 	
 	@Override
 	public void onBlockDestroyedByPlayer(World world, int i, int j, int k, int l) {
-		blockDestroyed(i, j, k);
+		blockDestroyed(world, i, j, k);
 	}
 	
 	@Override
 	public void onBlockDestroyedByExplosion(World world, int i, int j, int k, Explosion explosion) {
-		blockDestroyed(i, j, k);
+		blockDestroyed(world, i, j, k);
 	}
 
-	private void blockDestroyed(int i, int j, int k) {
-		if(!WorldSaveHandler.instance.isReady) {
-			WorldSaveHandler.instance.init();
+	private void blockDestroyed(World world, int i, int j, int k) {
+		if(!world.isRemote) {
+			if(!WorldSaveHandlerServer.instance.isReady) {
+				WorldSaveHandlerServer.instance.init();
+			}
+			WorldSaveHandlerServer.instance.removeCoord(new ChunkCoordinates(i, 0, k));
 		}
-		WorldSaveHandler.instance.removeCoord(new ChunkCoordinates(i, 0, k));
 	}
 	
     public int getMobilityFlag() {

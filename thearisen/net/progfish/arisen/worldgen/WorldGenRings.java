@@ -30,9 +30,9 @@ public class WorldGenRings extends WorldGenMonumentBase {
 			j += rand.nextInt(20) + 20;
 		}
 		int size = rand.nextInt(10) + 8;
-		genCircle(i, j, k, size - 1, size, RING_BLOCK, 0, 0, 5);
-		genCircle(i, j, k, size - 1, size, RING_BLOCK, 0, 1, 5);
-		genCircle(i, j, k, size - 1, size, RING_BLOCK, 0, 2, 5);
+		genCircle(i, j, k, size - 1, size, RING_BLOCK, 0, 0, 1);
+		genCircle(i, j, k, size - 1, size, RING_BLOCK, 0, 1, 1);
+		genCircle(i, j, k, size - 1, size, RING_BLOCK, 0, 2, 1);
 		
 		int x = i - size;
 		int y = j - size;

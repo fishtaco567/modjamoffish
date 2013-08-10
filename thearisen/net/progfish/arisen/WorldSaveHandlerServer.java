@@ -12,21 +12,23 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Random;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
+import net.progfish.arisen.network.ArisenPacketHandler;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-public class WorldSaveHandler {
+public class WorldSaveHandlerServer {
 
 	private File saveFile;
-	public ArrayList<ChunkCoordinates> coordList = new ArrayList();
-	public boolean lichKilled = false;
+	private ArrayList<ChunkCoordinates> coordList = new ArrayList();
+	private boolean lichKilled = false;
 	public boolean isReady = false;
 	
-	public static WorldSaveHandler instance = new WorldSaveHandler();
+	public static WorldSaveHandlerServer instance = new WorldSaveHandlerServer();
 	
-	public WorldSaveHandler() {
+	public WorldSaveHandlerServer() {
 		
 	}
 	
@@ -50,12 +52,27 @@ public class WorldSaveHandler {
 		}
 	}
 	
+	public void setLichKilled(Boolean killed) {
+		this.lichKilled = killed;
+		MinecraftServer.getServer().getConfigurationManager().sendPacketToAllPlayers(ArisenPacketHandler.getMonumentPacket());
+	}
+	
+	public boolean getLichKilled() {
+		return this.lichKilled;
+	}
+	
 	public void removeCoord(ChunkCoordinates c) {
 		coordList.remove(c);
+		MinecraftServer.getServer().getConfigurationManager().sendPacketToAllPlayers(ArisenPacketHandler.getMonumentPacket());
 	}
 	
 	public void addCoord(ChunkCoordinates c) {
 		coordList.add(c);
+		MinecraftServer.getServer().getConfigurationManager().sendPacketToAllPlayers(ArisenPacketHandler.getMonumentPacket());
+	}
+	
+	public ArrayList<ChunkCoordinates> getCoordList() {
+		return coordList;
 	}
 	
 	public void load(File f) {
@@ -137,26 +154,7 @@ public class WorldSaveHandler {
 			}
 			writer.close();
 		}
-		instance = new WorldSaveHandler();
-	}
-
-	public ChunkCoordinates getNearestMonument(double par2, double par4) {
-		double distance = Integer.MAX_VALUE;
-		int coord = -1;
-		for(int i = 0; i < coordList.size(); i++)
-		{
-			ChunkCoordinates coords = coordList.get(i);
-			double td = Math.sqrt((par2 - coords.posX) * (par2 - coords.posX) + (par4 - coords.posZ) * (par4 - coords.posZ));
-			if(td < distance) {
-				distance = td;
-				coord = i;
-			}
-		}
-		if(coord != -1)
-		{
-			return coordList.get(coord);
-		}
-		return new ChunkCoordinates(0, 0, 0);
+		instance = new WorldSaveHandlerServer();
 	}
 	
 }

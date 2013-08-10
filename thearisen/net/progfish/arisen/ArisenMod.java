@@ -6,6 +6,7 @@ import net.progfish.arisen.blocks.ArisenBlocks;
 import net.progfish.arisen.client.item.ArisenItems;
 import net.progfish.arisen.commands.CommandRegistry;
 import net.progfish.arisen.entities.ArisenEntityRegistry;
+import net.progfish.arisen.network.ArisenPacketHandler;
 import net.progfish.arisen.proxy.CommonProxy;
 import net.progfish.arisen.worldgen.WorldGenHandler;
 import cpw.mods.fml.common.Mod;
@@ -21,7 +22,7 @@ import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, connectionHandler = ConnectionHandlerArisen.class)
+@NetworkMod(channels = { "monuments" }, clientSideRequired = true, serverSideRequired = false, packetHandler = ArisenPacketHandler.class, connectionHandler = ConnectionHandlerArisen.class)
 @Mod(modid = ModInfo.MOD_ID, name = ModInfo.MOD_NAME, version = ModInfo.MOD_VERSION)
 public class ArisenMod {
 	
@@ -33,12 +34,14 @@ public class ArisenMod {
 	
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
+		System.out.println("Started");
 		CommandRegistry.init(event);
 	}
 	
 	@EventHandler
 	public void serverStop(FMLServerStoppedEvent event) {
-		WorldSaveHandler.instance.close();
+		System.out.println("Stopped");
+		WorldSaveHandlerServer.instance.close();
 	}
 	
 	@EventHandler
