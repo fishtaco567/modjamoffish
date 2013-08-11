@@ -5,6 +5,9 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.MathHelper;
 
 public class ModelLich extends ModelBase
 {
@@ -79,10 +82,20 @@ public class ModelLich extends ModelBase
 		model.rotateAngleZ = z;
 	}
 
+    @Override
+    public void setLivingAnimations(EntityLivingBase entityliving, float f, float f1, float f2) {
+        flap1.rotateAngleX = MathHelper.cos((f / 5)) * f1 + f1;
+        flap2.rotateAngleX = MathHelper.cos((f / 5)) * f1 + f1;
+    }
+    
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity e)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, e);
+        head.rotateAngleX = f4 / 57.29578F;
+        head.rotateAngleY = f3 / 57.29578F;
+        backOfHead.rotateAngleX = head.rotateAngleX;
+        backOfHead.rotateAngleY = head.rotateAngleY;
 	}
 
 }
