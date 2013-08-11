@@ -21,7 +21,7 @@ public class RenderLich extends RenderLiving {
 	public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0.0F, (float)(Math.cos(time / 81F)) / 20F + ((EntityLich)par1Entity).floatOffset, 0.0F);
+		GL11.glTranslatef(0.0F, (float)(Math.cos(time / 81F)) / 20F, 0.0F);
 		if(time > 512)
 		{
 			time = 0;
@@ -34,7 +34,7 @@ public class RenderLich extends RenderLiving {
 	public void doRenderLiving(EntityLiving par1EntityLiving, double par2, double par4, double par6, float par8, float par9)
 	{
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0.0F, (float)(Math.cos(time / 81F)) / 20F + ((EntityLich)par1EntityLiving).floatOffset, 0.0F);
+		GL11.glTranslatef(0.0F, (float)(Math.cos(time / 81F)) / 20F, 0.0F);
 		if(time > 512)
 		{
 			time = 0;
