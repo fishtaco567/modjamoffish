@@ -2,7 +2,11 @@ package net.progfish.arisen.entities;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,12 +20,13 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.progfish.arisen.ArisenMod;
 import net.progfish.arisen.WorldSaveHandlerServer;
+import net.progfish.arisen.client.render.particle.EntityCustomFX;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class EntityLich extends EntityMob {
-
-	private Random displayRand;
-	public float floatOffset;
 	
 	private int effectParticleTimer = -1;
 	
@@ -53,7 +58,7 @@ public class EntityLich extends EntityMob {
 	protected void attackEntity(Entity par1Entity, float par2) {
 		boolean attacked = false;
 		if(this.attackTime <= 0) {
-			if(this.getRNG().nextInt(5) == 0)
+			if(this.getRNG().nextInt(6) == 0)
             {
             	if(par1Entity instanceof EntityLivingBase)
             	{
@@ -83,8 +88,8 @@ public class EntityLich extends EntityMob {
 	            		}
             		}
             		
-            		if(this.getRNG().nextInt(4) == 0) {
-            			this.addPotionEffect(new PotionEffect(14, 400, 2, true));
+            		if(this.getRNG().nextInt(5) == 0) {
+            			this.addPotionEffect(new PotionEffect(14, 300, 2, true));
             		}
             		
             		this.dataWatcher.updateObject(16, new Byte((byte)10));
@@ -102,19 +107,38 @@ public class EntityLich extends EntityMob {
     protected void fall(float par1) {}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
-		if(worldObj.isRemote) {
-			int timer = this.dataWatcher.getWatchableObjectByte(16);
-			if(timer > 0) {
-	    		for (int i = 0; i < 20; i++) {
-	                double d0 = this.rand.nextGaussian() * 0.02D;
-	                double d1 = this.rand.nextGaussian() * 0.02D;
-	                double d2 = this.rand.nextGaussian() * 0.02D;
-	                this.worldObj.spawnParticle("explode", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
-	            }
-	    		this.dataWatcher.updateObject(16, new Byte((byte)(timer - 1)));
+		int timer = this.dataWatcher.getWatchableObjectByte(16);
+		boolean flag = true;
+		if(timer > 0) {
+			flag = false;
+			for(int i = 0; i < 20; i++) {
+                double d0 = this.rand.nextGaussian() * 0.02D;
+                double d1 = this.rand.nextGaussian() * 0.02D;
+                double d2 = this.rand.nextGaussian() * 0.02D;
+                ArisenMod.proxy.spawnParticle("lich2", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
 			}
+    		this.dataWatcher.updateObject(16, new Byte((byte)(timer - 1)));
+		}
+		if(rand.nextInt(10) == 0) {
+			for(Object obj : this.getActivePotionEffects()) {
+				if(obj instanceof PotionEffect) {
+					PotionEffect effect = (PotionEffect)obj;
+					if(effect.getPotionID() == 14) {
+						flag = false;
+					}
+				}
+			}
+    		for (int i = 0; i < 10; i++) {
+                double d0 = this.rand.nextGaussian() * 0.02D;
+                double d1 = this.rand.nextGaussian() * 0.02D;
+                double d2 = this.rand.nextGaussian() * 0.02D;
+                if(flag) {
+                ArisenMod.proxy.spawnParticle("lich1", this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+                }
+            }
 		}
 	}
 	
