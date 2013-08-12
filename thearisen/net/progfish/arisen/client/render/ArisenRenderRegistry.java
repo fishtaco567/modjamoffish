@@ -3,12 +3,14 @@ package net.progfish.arisen.client.render;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.progfish.arisen.entities.EntityLich;
+import net.progfish.arisen.entities.EntityRiftCreature;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ArisenRenderRegistry {
 
 	public static void init() {
 		addRenderer(EntityLich.class, new RenderLich(new ModelLich(), 0.25F));
+		addRenderer(EntityRiftCreature.class, new RenderRiftCreature(new ModelRiftCreature(), 0.25F));
 	}
 	
 	public static void addRenderer(Class<? extends Entity> entity, Render render) {

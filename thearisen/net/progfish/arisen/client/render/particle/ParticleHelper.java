@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 public class ParticleHelper {
 
+	public static final String PARTICLES_PATH = "particles" + File.separator;
+	
 	public static HashMap<String, String> nameTextureMap;
 	
 	public static void addMapping(String name, String tex) {
@@ -17,9 +19,10 @@ public class ParticleHelper {
 	
 	static {
 		nameTextureMap = new HashMap();
-		addMapping("lich1", "particles" + File.separator + "lich1.png");
-		addMapping("lich2", "particles" + File.separator + "lich2.png");
-		addMapping("lich3", "particles" + File.separator + "lich3.png");
+		addMapping("lich1", PARTICLES_PATH + "lich1.png");
+		addMapping("lich2", PARTICLES_PATH + "lich2.png");
+		addMapping("lich3", PARTICLES_PATH + "lich3.png");
+		addMapping("riftsmall", PARTICLES_PATH + "riftsmall.png");
 	}
 	
 }

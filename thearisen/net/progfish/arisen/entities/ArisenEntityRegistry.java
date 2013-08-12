@@ -12,7 +12,9 @@ public class ArisenEntityRegistry {
 	
 	public static void init(FMLInitializationEvent event) {
 		addMapping(EntityLich.class, "Lich", 64, 1, true, false);
+		addMapping(EntityRiftCreature.class, "RiftCreature", 64, 1, true, false);
 		addMobName("Lich", "Lich");
+		addMobName("RiftCreature", "Rift Creature");
 	}
 	
 	public static void addMapping(Class<? extends Entity> entityClass, String entityName, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, boolean spawnerOrEgg) {
